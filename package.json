@@ -11,7 +11,8 @@
     "deploy": "tgcloud push && tgcloud migrate",
     "status": "tgcloud status",
     "diff": "tgcloud diff",
-    "setup:key": "tgcloud run lib/setup-key"
+    "setup:key": "tgcloud run lib/setup-key",
+    "seed": "tgcloud run lib/seed"
   },
   "devDependencies": {
     "@tgcloud/cli": "^0.2.0"

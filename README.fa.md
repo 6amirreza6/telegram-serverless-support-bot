@@ -22,6 +22,16 @@
 - [Node.js](https://nodejs.org/) نسخه 18 یا جدیدتر
 - یک ربات ثبت‌شده در [@BotFather](https://t.me/BotFather) با قابلیت **Serverless فعال**: وارد ربات خود شوید → `Serverless` → روشن کنید.
 
+## ⚡ نصب‌کننده وب (ساده‌ترین راه)
+
+با ترمینال راحت نیستید؟ **[نصب‌کننده وب](https://6amirreza6.github.io/telegram-serverless-support-bot/)** همه‌چیز را در مرورگر شما انجام می‌دهد:
+
+1. مراحل گرفتن توکن **CLI ACCESS** از BotFather را نشان می‌دهد و تنظیمات شما (آیدی مدیر، ادمین‌ها، دسته‌بندی‌های دوزبانه، زبان پیش‌فرض و محدودیت‌های ضدسوءاستفاده) را در همان صفحه جمع می‌کند — **هیچ داده‌ای به هیچ سروری ارسال نمی‌شود**.
+2. از سورس همین مخزن یک پروژه کامل به‌همراه فایل تنظیمات شخصی `seed-config.js` می‌سازد و به‌صورت zip دانلود می‌کند.
+3. در پایان فقط ۵ دستور CLI باقی می‌ماند: `npm install` ← `npx tgcloud login` ← `push` ← `migrate` ← `npx tgcloud run lib/seed`.
+
+سورس این نصب‌کننده در پوشه [`docs/`](docs/) همین مخزن است — قبل از استفاده می‌توانید آن را بازبینی کنید.
+
 ## شروع سریع (CLI Access)
 
 همه مراحل در ترمینال انجام می‌شود. توکن CLI ربات **هرگز از سیستم شما خارج نمی‌شود** — در پوشه `.tgcloud/` ذخیره می‌شود که در `.gitignore` هست.
@@ -35,7 +45,7 @@ cd my-support-bot
 #    محتویات این مخزن را داخل پوشه کپی کنید
 #    (tgcloud/، package.json، tgcloud.jsonc — فایل‌های اولیه را جایگزین کنید).
 #    با گیت:
-git clone https://github.com/<you>/telegram-support-bot tmp-clone
+git clone https://github.com/6amirreza6/telegram-serverless-support-bot tmp-clone
 cp -R tmp-clone/tgcloud tmp-clone/tgcloud.jsonc tmp-clone/package.json .
 rm -rf tmp-clone
 
@@ -68,6 +78,8 @@ CLI چیزی شبیه این چاپ می‌کند:
 > `npx tgcloud run lib/setup-key` را اجرا کنید — کلید جدید، قبلی را باطل می‌کند
 > و مالکیت با موفقیتِ claim منتقل می‌شود.
 
+**روش جایگزین: Seed در زمان استقرار.** اگر می‌خواهید آیدی مدیر، ادمین‌ها و دسته‌بندی‌ها بدون رفت‌وبرگشت تلگرامی ثبت شوند، فایل `tgcloud/lib/seed-config.example.js` را به `seed-config.js` کپی کنید (در gitignore است)، مقادیر خودتان را بگذارید و بعد از `migrate` دستور `npx tgcloud run lib/seed` را اجرا کنید. نصب‌کننده وب همین کار را خودکار انجام می‌دهد.
+
 ## دستورهای روزمره (CLI)
 
 | دستور | کار |
@@ -77,6 +89,7 @@ CLI چیزی شبیه این چاپ می‌کند:
 | `npx tgcloud push` | دیپلوی ماژول‌های تغییرکرده (اتمی، شامل حذف‌ها) |
 | `npx tgcloud migrate` | بررسی و اعمال تغییرات `schema.js` |
 | `npx tgcloud run lib/setup-key` | چاپ کلید تازه یک‌بارمصرف مالکیت |
+| `npx tgcloud run lib/seed` | بارگذاری یک‌باره تنظیمات `seed-config.js` (مالک/ادمین/دسته‌ها) |
 | `npx tgcloud pull` / `reset` | همگام‌سازی با کلاود / دورریختن تغییرات محلی |
 
 در CI به‌جای `npx tgcloud login` متغیر محیطی `TGCLOUD_TOKEN` را ست کنید.
@@ -88,7 +101,7 @@ CLI چیزی شبیه این چاپ می‌کند:
 این مخزن برای عمومی‌بودن طراحی شده:
 
 - **هیچ آیدی، توکن یا یوزرنیمی در کد نیست** — مدیر در زمان اجرا از دیتابیس خوانده می‌شود؛ درخت پروژه را grep کنید، چیزی شخصی پیدا نمی‌کنید.
-- `.tgcloud/` (توکن CLI شما) و `node_modules/` در gitignore هستند.
+- `.tgcloud/` (توکن CLI شما)، `tgcloud/lib/seed-config.js` (آیدی‌های شخصی شما) و `node_modules/` در gitignore هستند.
 - داده کاربران هرگز وارد گیت نمی‌شود — در دیتابیس سرورلس ربات زندگی می‌کند.
 
 ```bash
@@ -131,7 +144,9 @@ tgcloud/
 │  ├─ i18n.js             # تمام متن‌های fa/en
 │  ├─ ui.js               # کیبوردها، کارت‌ها، تاریخ جلالی
 │  ├─ flow.js             # لایه ارسال: مدیریت 403/429، پیام همزمان
-│  └─ setup-key.js        # ماژول اجراشدنی از CLI → چاپ کلید /setup
+│  ├─ setup-key.js        # ماژول اجراشدنی از CLI → چاپ کلید /setup
+│  ├─ seed.js             # اجرای یک‌باره seed-config.js (اختیاری)
+│  └─ seed-config.example.js  # الگوی تنظیمات شخصی (کپی → seed-config.js)
 └─ handlers/
    ├─ message.js          # مسیریاب: کاربر/پشتیبانی، ماشین وضعیت، فرمان‌ها
    ├─ callback_query.js   # تمام دکمه‌های شیشه‌ای (نام‌فضاهای u:* / a:*)

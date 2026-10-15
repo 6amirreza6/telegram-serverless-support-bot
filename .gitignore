@@ -1,6 +1,9 @@
 # CLI state — contains your bot's CLI access token. NEVER commit this.
 .tgcloud/
 
+# Local deploy-time seed with YOUR personal IDs. NEVER commit this.
+tgcloud/lib/seed-config.js
+
 # Dependencies
 node_modules/
 
