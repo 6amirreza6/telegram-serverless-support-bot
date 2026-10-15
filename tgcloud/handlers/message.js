@@ -335,7 +335,8 @@ async function handleCommand(cmd, arg, user, lang, staff) {
 async function handleSetup(arg, user) {
   const chatId = user.tgId;
   if (!arg) {
-    // Hint only while no owner exists — otherwise treat as an unknown command.
+    // Hint only while no owner exists; afterwards treat as an unknown command
+    // (falls through to the normal menu/panel reply).
     if (await store.getOwnerId()) return false;
     await sendText(chatId,
       t('fa', 'setup_hint') + '\n—\n' + t('en', 'setup_hint'));
@@ -369,7 +370,7 @@ export default async function (msg) {
     if (msg.from.is_bot) return;
     chatId = msg.chat.id;
 
-    const { user, isNew } = await store.upsertUser(msg.from);
+    const { user } = await store.upsertUser(msg.from);
     const staff = await store.isStaff(user.tgId);
     const lang = staff ? normLang(user.lang ?? 'fa') : normLang(user.lang);
 
@@ -380,8 +381,9 @@ export default async function (msg) {
 
     // Owner claim works even before a language is chosen / owner exists.
     if (cmd === 'setup') {
-      await handleSetup(argOf(msg.text), user);
-      return;
+      const handled = await handleSetup(argOf(msg.text), user);
+      if (handled) return;
+      // not handled: owner already set & no key given → unknown-command path
     }
 
     // First contact: language selection comes first (user side).
