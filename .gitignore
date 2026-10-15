@@ -1,0 +1,14 @@
+# CLI state — contains your bot's CLI access token. NEVER commit this.
+.tgcloud/
+
+# Dependencies
+node_modules/
+
+# Logs & OS junk
+*.log
+.DS_Store
+Thumbs.db
+
+# Local env files (this project doesn't need any, but stay safe)
+.env
+.env.*

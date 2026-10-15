@@ -1,0 +1,13 @@
+// tgcloud.jsonc — project config for the tgcloud CLI.
+//
+// This project has no Mini App front-end, so no "static" section is
+// required. If you later add a front-end, point "source" at its build
+// folder and `npx tgcloud push` will deploy it together with the bot:
+//
+// "static": {
+//   "source": "dist",
+//   "spa": true
+// }
+{
+  "$schema": "./node_modules/@tgcloud/cli/schema/tgcloud.json"
+}

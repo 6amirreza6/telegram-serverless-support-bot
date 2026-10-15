@@ -1,0 +1,19 @@
+{
+  "name": "telegram-serverless-support-bot",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "license": "Unlicense",
+  "description": "Fully serverless support-ticket bot for Telegram — no server to host. Bilingual (fa/en), multi-admin, categories, anti-spam. Runs on Telegram Serverless.",
+  "scripts": {
+    "push": "tgcloud push",
+    "migrate": "tgcloud migrate",
+    "deploy": "tgcloud push && tgcloud migrate",
+    "status": "tgcloud status",
+    "diff": "tgcloud diff",
+    "setup:key": "tgcloud run lib/setup-key"
+  },
+  "devDependencies": {
+    "@tgcloud/cli": "^0.2.0"
+  }
+}
